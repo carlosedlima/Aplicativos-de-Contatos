@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Teste Skytef</string>
+    <string name="Email">Email</string>
+    <string name="Nome">Nome Completo</string>
+    <string name="Register">Salvar</string>
+    <string name="Number">Numero de Telefone\n</string>
+    <string name="Deletar">Deletar\n</string>
+    <string name="telefone">Telefone:</string>
+    <string name="nome">Nome:</string>
+</resources>
