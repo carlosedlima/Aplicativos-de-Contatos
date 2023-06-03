@@ -1,20 +1,18 @@
 package com.example.testeskytef.ui.details;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
 import android.view.View;
 
-import com.example.testeskytef.R;
-import com.example.testeskytef.data.datasource.retrofitconfig.RetrofitContactDataSource;
 import com.example.testeskytef.data.models.Contact;
 import com.example.testeskytef.databinding.ActivityDetailsBinding;
-import com.example.testeskytef.databinding.ActivityHomeBinding;
 
 public class DetailsActivity extends AppCompatActivity {
 
     private ActivityDetailsBinding binding;
-    private RetrofitContactDataSource retrofitContactDataSource;
+    private DetailsViewModel viewModel;
 
 
     @Override
@@ -23,8 +21,7 @@ public class DetailsActivity extends AppCompatActivity {
         binding = ActivityDetailsBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
-        retrofitContactDataSource = new RetrofitContactDataSource();
-
+        viewModel = new ViewModelProvider(this).get(DetailsViewModel.class);
         Contact contact = getIntent().getExtras().getParcelable("CONTATO");
 
         binding.dadosNome.setText(contact.getFullname());
@@ -33,7 +30,7 @@ public class DetailsActivity extends AppCompatActivity {
 
         binding.Deletar.setOnClickListener(
                 view1 -> {
-                    retrofitContactDataSource.deleteContact(contact.getId());
+                    viewModel.deleteContact(contact.getId());
                     finish();
                 }
         );

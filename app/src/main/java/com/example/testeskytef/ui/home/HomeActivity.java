@@ -1,6 +1,7 @@
 package com.example.testeskytef.ui.home;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.content.Intent;
@@ -8,40 +9,39 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.View;
 
-import com.example.testeskytef.data.datasource.retrofitconfig.RetrofitContactDataSource;
-import com.example.testeskytef.data.models.Contact;
 import com.example.testeskytef.databinding.ActivityHomeBinding;
 import com.example.testeskytef.ui.details.DetailsActivity;
 import com.example.testeskytef.ui.home.adapter.ContactsAdapter;
+import com.example.testeskytef.ui.home.viewmodel.HomeViewModel;
 import com.example.testeskytef.ui.register.RegisterActivity;
-import com.example.testeskytef.util.RecyclerViewInterface;
 
-public class HomeActivity extends AppCompatActivity implements RecyclerViewInterface {
+public class HomeActivity extends AppCompatActivity {
 
     private ActivityHomeBinding binding;
     private ContactsAdapter contactsAdapter;
-
-    private final RetrofitContactDataSource retrofitDataSource = new RetrofitContactDataSource();
-
+    private HomeViewModel viewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+
+        viewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+
         settingRecycler();
-        setAdapterItems();
-        contactsAdapter.notifyDataSetChanged();
+
         binding.Add.setOnClickListener(onClick -> {
          startActivity(new Intent(getBaseContext(), RegisterActivity.class));
         });
+
+        viewModelObservers();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        retrofitDataSource.getContacts();
-        contactsAdapter.notifyDataSetChanged();
+        viewModel.getContacts();
     }
 
     private void settingRecycler(){
@@ -55,13 +55,10 @@ public class HomeActivity extends AppCompatActivity implements RecyclerViewInter
         binding.RecyclerPrincipal.setAdapter(contactsAdapter);
         binding.RecyclerPrincipal.setLayoutManager(new LinearLayoutManager(this));
     }
-    private void setAdapterItems(){
-        contactsAdapter.setItems(retrofitDataSource.getContacts());
+    private void viewModelObservers(){
+            viewModel.getListOfContacts().observe(this, contacts -> {
+                contactsAdapter.setItems(contacts);
+            });
     }
 
-
-    @Override
-    public void onItemClick(int position) {
-
-    }
 }
