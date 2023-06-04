@@ -26,10 +26,9 @@ public class HomeActivity extends AppCompatActivity {
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
-
         viewModel = new ViewModelProvider(this).get(HomeViewModel.class);
-
         settingRecycler();
+
 
         binding.Add.setOnClickListener(onClick -> {
          startActivity(new Intent(getBaseContext(), RegisterActivity.class));
@@ -54,6 +53,7 @@ public class HomeActivity extends AppCompatActivity {
         });
         binding.RecyclerPrincipal.setAdapter(contactsAdapter);
         binding.RecyclerPrincipal.setLayoutManager(new LinearLayoutManager(this));
+
     }
     private void viewModelObservers(){
             viewModel.getListOfContacts().observe(this, contacts -> {
